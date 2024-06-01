@@ -68,18 +68,27 @@ document.addEventListener('DOMContentLoaded', function() {
     menuOverlay.style.display = 'flex';
   });
 
-  normalModeButton.addEventListener('click', function() {
-    alert('Normalモードが選択されました');
-    normalIndicator.style.display = 'inline';
-    proIndicator.style.display = 'none';
-    menuOverlay.style.display = 'none';
+  // 非同期関数を使用してモード変更処理を実装
+  normalModeButton.addEventListener('click', async function() {
+    try {
+      await changeMode('Normal');
+      normalIndicator.style.display = 'inline';
+      proIndicator.style.display = 'none';
+      menuOverlay.style.display = 'none';
+    } catch (error) {
+      console.error('Error changing to Normal mode:', error);
+    }
   });
 
-  proModeButton.addEventListener('click', function() {
-    alert('Proモードが選択されました');
-    proIndicator.style.display = 'inline';
-    normalIndicator.style.display = 'none';
-    menuOverlay.style.display = 'none';
+  proModeButton.addEventListener('click', async function() {
+    try {
+      await changeMode('Pro');
+      proIndicator.style.display = 'inline';
+      normalIndicator.style.display = 'none';
+      menuOverlay.style.display = 'none';
+    } catch (error) {
+      console.error('Error changing to Pro mode:', error);
+    }
   });
 
   menuCloseButton.addEventListener('click', function() {
@@ -114,4 +123,14 @@ document.addEventListener('DOMContentLoaded', function() {
   helpClose.addEventListener('click', function() {
     helpOverlay.style.display = 'none';
   });
+
+  // モード変更を非同期に処理する関数
+  async function changeMode(mode) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        alert(`${mode}モードが選択されました`);
+        resolve();
+      }, 1000); // 1秒後に処理を完了するシミュレーション
+    });
+  }
 });
