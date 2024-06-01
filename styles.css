@@ -105,8 +105,15 @@ textarea, #results {
   gap: 1rem;
 }
 
+.search-field-wrapper {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  position: relative;
+}
+
 .search-field {
-  flex: 1;
+  flex-grow: 1;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   border: 1px solid #ccc;
@@ -115,6 +122,24 @@ textarea, #results {
   height: 48px;
   color: #333;
   text-align: left;
+}
+
+.add-button {
+  position: absolute;
+  right: 0;
+  background-color: #FFA500; /* オレンジ色の背景 */
+  color: white; /* 白い文字 */
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border: 2px solid white; /* 白い境界線を追加 */
+}
+
+.add-button:hover {
+  background-color: #e59400; /* ホバー時の色 */
 }
 
 .button {
@@ -163,25 +188,6 @@ textarea, #results {
 .upload-button-container img, .copy-button-container img {
   width: 24px;
   height: 24px;
-}
-
-.search-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin-top: 1rem;
-}
-
-.search-field {
-  flex: 1;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 30px;
-  margin-right: 1rem;
-  box-sizing: border-box;
-  height: 48px;
 }
 
 .loading-indicator {
@@ -292,9 +298,6 @@ textarea, #results {
   width: 80%; /* ボタンの幅を統一 */
   max-width: 200px; /* ボタンの最大幅を設定 */
   box-sizing: border-box;
-  display: flex; /* フレックスボックスを使用 */
-  align-items: center; /* 縦方向の中央揃え */
-  justify-content: center; /* 横方向の中央揃え */
 }
 
 .mode-button:hover, #menu-close:hover, #help-close:hover {
@@ -303,8 +306,8 @@ textarea, #results {
 
 .indicator {
   display: none; /* 初期状態では非表示 */
-  margin-right: 10px; /* 三角形を前に表示するために右側にマージンを設定 */
-  color: #FFA500; /* 三角形の色をオレンジ色に設定 */
+  margin-left: 10px;
+  color: #FFA500; /* オレンジ色 */
 }
 
 /* ロゴのスタイル */

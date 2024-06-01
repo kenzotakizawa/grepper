@@ -50,56 +50,41 @@ document.addEventListener('DOMContentLoaded', function() {
   const normalModeButton = document.getElementById('normal-mode-button');
   const proModeButton = document.getElementById('pro-mode-button');
   const menuCloseButton = document.getElementById('menu-close');
-
-  const normalIndicator = document.createElement('span');
-  normalIndicator.textContent = '▶︎';
-  normalIndicator.classList.add('indicator');
-  normalModeButton.prepend(normalIndicator);
-
-  const proIndicator = document.createElement('span');
-  proIndicator.textContent = '▶︎';
-  proIndicator.classList.add('indicator');
-  proModeButton.prepend(proIndicator);
-
-  // 初期状態でNormalモードを選択
-  normalIndicator.style.display = 'inline';
+  const addButton = document.getElementById('add-button');
+  const searchContainer = document.getElementById('search-fields');
+  let isProMode = false;
 
   menuButton.addEventListener('click', function() {
     menuOverlay.style.display = 'flex';
   });
 
-  // 非同期関数を使用してモード変更処理を実装
-  normalModeButton.addEventListener('click', async function() {
-    try {
-      await changeMode('Normal');
-      normalIndicator.style.display = 'inline';
-      proIndicator.style.display = 'none';
-      menuOverlay.style.display = 'none';
-    } catch (error) {
-      console.error('Error changing to Normal mode:', error);
-    }
+  normalModeButton.addEventListener('click', function() {
+    isProMode = false;
+    addButton.style.display = 'none';
+    document.getElementById('normal-indicator').style.display = 'inline';
+    document.getElementById('pro-indicator').style.display = 'none';
+    menuOverlay.style.display = 'none';
+    // Proモードで追加された検索フィールドを削除
+    const additionalFields = searchContainer.querySelectorAll('.search-field-wrapper:not(:first-child)');
+    additionalFields.forEach(field => field.remove());
   });
 
-  proModeButton.addEventListener('click', async function() {
-    try {
-      await changeMode('Pro');
-      proIndicator.style.display = 'inline';
-      normalIndicator.style.display = 'none';
+  proModeButton.addEventListener('click', function() {
+    isProMode = true;
+    addButton.style.display = 'inline';
+    document.getElementById('normal-indicator').style.display = 'none';
+    document.getElementById('pro-indicator').style.display = 'inline';
+    menuOverlay.style.display = 'none';
+  });
+
+  menuOverlay.addEventListener('click', function(event) {
+    if (event.target === menuOverlay) {
       menuOverlay.style.display = 'none';
-    } catch (error) {
-      console.error('Error changing to Pro mode:', error);
     }
   });
 
   menuCloseButton.addEventListener('click', function() {
     menuOverlay.style.display = 'none';
-  });
-
-  // メニューオーバーレイ外がクリックされたときにオーバーレイを非表示
-  menuOverlay.addEventListener('click', function(event) {
-    if (event.target === menuOverlay) {
-      menuOverlay.style.display = 'none';
-    }
   });
 
   // ヘルプアイコンとヘルプオーバーレイの要素を取得
@@ -124,13 +109,16 @@ document.addEventListener('DOMContentLoaded', function() {
     helpOverlay.style.display = 'none';
   });
 
-  // モード変更を非同期に処理する関数
-  async function changeMode(mode) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        alert(`${mode}モードが選択されました`);
-        resolve();
-      }, 1000); // 1秒後に処理を完了するシミュレーション
-    });
-  }
+  addButton.addEventListener('click', function() {
+    if (isProMode) {
+      const newSearchFieldWrapper = document.createElement('div');
+      newSearchFieldWrapper.classList.add('search-field-wrapper');
+      const newSearchField = document.createElement('input');
+      newSearchField.type = 'text';
+      newSearchField.classList.add('search-field');
+      newSearchField.placeholder = '検索文字列を入力してください...';
+      newSearchFieldWrapper.appendChild(newSearchField);
+      searchContainer.insertBefore(newSearchFieldWrapper, addButton.parentElement.nextSibling);
+    }
+  });
 });
