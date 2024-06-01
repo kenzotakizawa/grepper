@@ -1,0 +1,314 @@
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #FFA500;
+  color: #333;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background-color: #FFA500;
+  color: white;
+  box-sizing: border-box;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.nav img {
+  width: 24px;
+  height: 24px;
+  margin: 0 1rem;
+}
+
+.textarea-wrapper, .results-wrapper {
+  position: relative;
+}
+
+textarea, #results {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+  color: #333;
+  height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+#results {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+#results p, #input-text::placeholder, #search-query::placeholder {
+  text-align: left;
+  color: #999;
+  margin: 0;
+}
+
+#input-text::placeholder, #search-query::placeholder {
+  color: #999;
+}
+
+.search-field, #results {
+  text-align: left;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 1200px;
+  margin-top: 2rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  gap: 1rem;
+}
+
+.textarea-container, .results-container {
+  width: 100%;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.search-field {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  box-sizing: border-box;
+  height: 48px;
+  color: #333;
+  text-align: left;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: #FFA500;
+  background-color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: center;
+  height: 48px;
+  box-sizing: border-box;
+  margin-top: 0;
+}
+
+.button:hover {
+  background-color: #f0f0f0;
+}
+
+.button-icon {
+  margin-right: 0.5rem;
+}
+
+.copy-button-container, .upload-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -1.5rem;
+  right: -1.5rem;
+  background-color: #FFA500;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+  z-index: 10;
+  border: 2px solid white;
+}
+
+.upload-button-container img, .copy-button-container img {
+  width: 24px;
+  height: 24px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.search-field {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  margin-right: 1rem;
+  box-sizing: border-box;
+  height: 48px;
+}
+
+.loading-indicator {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+}
+
+.loading-indicator .dot {
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  background-color: #333;
+  border-radius: 50%;
+  animation: dot-blink 1s infinite;
+}
+
+.loading-indicator .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-indicator .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dot-blink {
+  0%, 80%, 100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    width: 100%;
+    padding: 0;
+  }
+  .textarea-container, .results-container {
+    width: 90%;
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+  .textarea-container {
+    margin-right: 0;
+  }
+  textarea, #results {
+    height: auto;
+  }
+  .copy-button-container, .upload-button-container {
+    top: -1rem;
+    right: -1rem;
+  }
+  .search-field {
+    margin-bottom: 1rem;
+  }
+}
+
+/* ヘルプオーバーレイとメニューオーバーレイのスタイル */
+.menu-overlay, .help-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* メニューコンテンツとヘルプコンテンツのスタイル */
+.menu-content, .help-content {
+  background-color: #FFA500;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80%;
+  overflow-y: auto;
+  color: white;
+  border: 2px solid white; /* 境界線を追加 */
+}
+
+.menu-content h2, .help-content h2 {
+  margin-top: 0;
+}
+
+.menu-content p, .menu-content ol, .help-content p, .help-content ol {
+  margin-bottom: 1rem;
+}
+
+.mode-button, #menu-close, #help-close {
+  background-color: white;
+  color: #FFA500;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto 0;
+  width: 80%; /* ボタンの幅を統一 */
+  max-width: 200px; /* ボタンの最大幅を設定 */
+  box-sizing: border-box;
+  display: flex; /* フレックスボックスを使用 */
+  align-items: center; /* 縦方向の中央揃え */
+  justify-content: center; /* 横方向の中央揃え */
+}
+
+.mode-button:hover, #menu-close:hover, #help-close:hover {
+  background-color: #f0f0f0;
+}
+
+.indicator {
+  display: none; /* 初期状態では非表示 */
+  margin-right: 10px; /* 三角形を前に表示するために右側にマージンを設定 */
+  color: #FFA500; /* 三角形の色をオレンジ色に設定 */
+}
+
+/* ロゴのスタイル */
+.logo img {
+  width: 200px;
+  height: auto;
+}
