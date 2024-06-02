@@ -3,6 +3,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const loadingIndicator = document.getElementById('loading-indicator');
   loadingIndicator.style.display = 'none';
 
+  // 初期状態でNormalモードを選択
+  const normalModeButton = document.getElementById('normal-mode-button');
+  const proModeButton = document.getElementById('pro-mode-button');
+  const addButton = document.getElementById('add-button');
+  const searchContainer = document.getElementById('search-fields');
+  let isProMode = false;
+
+  // 初期状態でNormalモードを示す
+  normalModeButton.innerHTML = '▶︎ Normal';
+  proModeButton.innerHTML = 'Pro';
+
   document.getElementById('upload-button').addEventListener('click', function() {
     const input = document.createElement('input');
     input.type = 'file';
@@ -47,12 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // メニューアイコンとメニューオーバーレイについて
   const menuButton = document.querySelector('.nav img[alt="メニューアイコン"]');
   const menuOverlay = document.getElementById('menu-overlay');
-  const normalModeButton = document.getElementById('normal-mode-button');
-  const proModeButton = document.getElementById('pro-mode-button');
   const menuCloseButton = document.getElementById('menu-close');
-  const addButton = document.getElementById('add-button');
-  const searchContainer = document.getElementById('search-fields');
-  let isProMode = false;
 
   menuButton.addEventListener('click', function() {
     menuOverlay.style.display = 'flex';
@@ -61,8 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
   normalModeButton.addEventListener('click', function() {
     isProMode = false;
     addButton.style.display = 'none';
-    document.getElementById('normal-indicator').style.display = 'inline';
-    document.getElementById('pro-indicator').style.display = 'none';
+    normalModeButton.innerHTML = '▶︎ Normal';
+    proModeButton.innerHTML = 'Pro';
     menuOverlay.style.display = 'none';
     // Proモードで追加された検索フィールドを削除
     const additionalFields = searchContainer.querySelectorAll('.search-field-wrapper:not(:first-child)');
@@ -72,8 +78,8 @@ document.addEventListener('DOMContentLoaded', function() {
   proModeButton.addEventListener('click', function() {
     isProMode = true;
     addButton.style.display = 'inline';
-    document.getElementById('normal-indicator').style.display = 'none';
-    document.getElementById('pro-indicator').style.display = 'inline';
+    normalModeButton.innerHTML = 'Normal';
+    proModeButton.innerHTML = '▶︎ Pro';
     menuOverlay.style.display = 'none';
   });
 
