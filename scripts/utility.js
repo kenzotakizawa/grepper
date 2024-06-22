@@ -6,8 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // 初期状態でNormalモードを選択
   const normalModeButton = document.getElementById('normal-mode-button');
   const proModeButton = document.getElementById('pro-mode-button');
-  const addButton = document.getElementById('add-button');
   const searchContainer = document.getElementById('search-fields');
+  const keywordsContainer = document.getElementById('keywords-container');
+  const addButton = document.getElementById('add-button'); // addButtonの定義をここに移動
   let isProMode = false;
 
   // 初期状態でNormalモードを示す
@@ -66,65 +67,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
   normalModeButton.addEventListener('click', function() {
     isProMode = false;
-    addButton.style.display = 'none';
+    addButton.style.display = 'none'; // Normalモードでは非表示
     normalModeButton.innerHTML = '▶︎ Normal';
     proModeButton.innerHTML = 'Pro';
     menuOverlay.style.display = 'none';
     // Proモードで追加された検索フィールドを削除
     const additionalFields = searchContainer.querySelectorAll('.search-field-wrapper:not(:first-child)');
     additionalFields.forEach(field => field.remove());
+    // Proモードで追加されたタグをクリア
+    keywordsContainer.innerHTML = '';
   });
 
   proModeButton.addEventListener('click', function() {
     isProMode = true;
-    addButton.style.display = 'inline';
+    addButton.style.display = 'inline'; // Proモードでは表示
     normalModeButton.innerHTML = 'Normal';
     proModeButton.innerHTML = '▶︎ Pro';
     menuOverlay.style.display = 'none';
   });
 
-  menuOverlay.addEventListener('click', function(event) {
-    if (event.target === menuOverlay) {
-      menuOverlay.style.display = 'none';
-    }
-  });
-
-  menuCloseButton.addEventListener('click', function() {
-    menuOverlay.style.display = 'none';
-  });
-
-  // ヘルプアイコンとヘルプオーバーレイの要素を取得
-  const helpIcon = document.querySelector('.nav img[alt="ヘルプアイコン"]');
-  const helpOverlay = document.getElementById('help-overlay');
-  const helpClose = document.getElementById('help-close');
-
-  // ヘルプアイコンがクリックされたときにオーバーレイを表示
-  helpIcon.addEventListener('click', function() {
-    helpOverlay.style.display = 'flex';
-  });
-
-  // ヘルプオーバーレイ外がクリックされたときにオーバーレイを非表示
-  helpOverlay.addEventListener('click', function(event) {
-    if (event.target === helpOverlay) {
-      helpOverlay.style.display = 'none';
-    }
-  });
-
-  // ヘルプポップアップ内の閉じるボタンがクリックされたときにオーバーレイを非表示
-  helpClose.addEventListener('click', function() {
-    helpOverlay.style.display = 'none';
-  });
-
-  addButton.addEventListener('click', function() {
-    if (isProMode) {
-      const newSearchFieldWrapper = document.createElement('div');
-      newSearchFieldWrapper.classList.add('search-field-wrapper');
-      const newSearchField = document.createElement('input');
-      newSearchField.type = 'text';
-      newSearchField.classList.add('search-field');
-      newSearchField.placeholder = '検索文字列を入力してください...';
-      newSearchFieldWrapper.appendChild(newSearchField);
-      searchContainer.insertBefore(newSearchFieldWrapper, addButton.parentElement.nextSibling);
-    }
-  });
+  // 追加ボタンのイベントリスナーを削除
+  // addButton.addEventListener('click', function() {
+  //   const searchQueryInput = document.getElementById('search-query');
+  //   const keyword = searchQueryInput.value.trim();
+  //   if (keyword !== '') {
+  //     addKeywordTag(keyword);
+  //     searchQueryInput.value = ''; // 検索キーワードをクリア
+  //   }
+  // });
 });
