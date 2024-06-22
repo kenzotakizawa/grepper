@@ -8,18 +8,20 @@ body {
   background-color: #FFA500;
   color: #333;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto; /* ページ全体をスクロール可能に */
 }
 
 .header {
-  width: 100%;
+  width: 90%;
+  max-width: 1200px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   padding: 1rem;
   background-color: #FFA500;
   color: white;
   box-sizing: border-box;
+  margin: auto;
 }
 
 .logo {
@@ -29,9 +31,7 @@ body {
 
 .nav {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  margin-top: 1rem;
 }
 
 .nav img {
@@ -62,16 +62,13 @@ textarea, #results {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  overflow-y: auto; /* 結果が多い場合にスクロール可能にする */
 }
 
 #results p, #input-text::placeholder, #search-query::placeholder {
   text-align: left;
   color: #999;
   margin: 0;
-}
-
-#input-text::placeholder, #search-query::placeholder {
-  color: #999;
 }
 
 .search-field, #results {
@@ -88,6 +85,7 @@ textarea, #results {
   padding: 1rem;
   box-sizing: border-box;
   gap: 1rem;
+  flex-grow: 1; /* コンテナが利用可能なスペースを使用する */
 }
 
 .textarea-container, .results-container {
@@ -127,19 +125,20 @@ textarea, #results {
 .add-button {
   position: absolute;
   right: 0;
-  background-color: #FFA500; /* オレンジ色の背景 */
-  color: white; /* 白い文字 */
+  background-color: #FFA500;
+  color: white;
   border: none;
   border-radius: 50%;
   width: 48px;
   height: 48px;
   cursor: pointer;
   transition: background-color 0.3s;
-  border: 2px solid white; /* 白い境界線を追加 */
+  border: 2px solid white;
+  z-index: 1000;
 }
 
 .add-button:hover {
-  background-color: #e59400; /* ホバー時の色 */
+  background-color: #e59400;
 }
 
 .button {
@@ -236,9 +235,6 @@ textarea, #results {
     margin-right: 0;
     margin-bottom: 1rem;
   }
-  .textarea-container {
-    margin-right: 0;
-  }
   textarea, #results {
     height: auto;
   }
@@ -275,7 +271,7 @@ textarea, #results {
   max-height: 80%;
   overflow-y: auto;
   color: white;
-  border: 2px solid white; /* 境界線を追加 */
+  border: 2px solid white;
 }
 
 .menu-content h2, .help-content h2 {
@@ -295,8 +291,8 @@ textarea, #results {
   cursor: pointer;
   display: block;
   margin: 20px auto 0;
-  width: 80%; /* ボタンの幅を統一 */
-  max-width: 200px; /* ボタンの最大幅を設定 */
+  width: 80%;
+  max-width: 200px;
   box-sizing: border-box;
 }
 
@@ -305,13 +301,35 @@ textarea, #results {
 }
 
 .indicator {
-  display: none; /* 初期状態では非表示 */
+  display: none;
   margin-left: 10px;
-  color: #FFA500; /* オレンジ色 */
+  color: #FFA500;
 }
 
-/* ロゴのスタイル */
+/* ロゴスタイル */
 .logo img {
   width: 200px;
   height: auto;
+}
+
+.keyword-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: #FFA500;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 20px;
+  margin: 0.25rem;
+}
+
+.keyword-tag button {
+  background: none;
+  border: none;
+  color: white;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+.keywords-title {
+  color: white;
 }

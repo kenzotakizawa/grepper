@@ -65,16 +65,30 @@ document.addEventListener('DOMContentLoaded', function() {
     menuOverlay.style.display = 'flex';
   });
 
+  // メニューオーバーレイを閉じる関数
+  function closeMenuOverlay() {
+    menuOverlay.style.display = 'none';
+  }
+
+  // 閉じるボタンのクリックイベント
+  menuCloseButton.addEventListener('click', closeMenuOverlay);
+
+  // オーバーレイ外のクリックイベント
+  menuOverlay.addEventListener('click', function(event) {
+    if (event.target === menuOverlay) {
+      closeMenuOverlay();
+    }
+  });
+
+  // NormalモードとProモードの切り替えについて
   normalModeButton.addEventListener('click', function() {
     isProMode = false;
     addButton.style.display = 'none'; // Normalモードでは非表示
     normalModeButton.innerHTML = '▶︎ Normal';
     proModeButton.innerHTML = 'Pro';
-    menuOverlay.style.display = 'none';
-    // Proモードで追加された検索フィールドを削除
+    closeMenuOverlay(); 
     const additionalFields = searchContainer.querySelectorAll('.search-field-wrapper:not(:first-child)');
     additionalFields.forEach(field => field.remove());
-    // Proモードで追加されたタグをクリア
     keywordsContainer.innerHTML = '';
   });
 
@@ -83,16 +97,30 @@ document.addEventListener('DOMContentLoaded', function() {
     addButton.style.display = 'inline'; // Proモードでは表示
     normalModeButton.innerHTML = 'Normal';
     proModeButton.innerHTML = '▶︎ Pro';
-    menuOverlay.style.display = 'none';
+    closeMenuOverlay();
   });
 
-  // 追加ボタンのイベントリスナーを削除
-  // addButton.addEventListener('click', function() {
-  //   const searchQueryInput = document.getElementById('search-query');
-  //   const keyword = searchQueryInput.value.trim();
-  //   if (keyword !== '') {
-  //     addKeywordTag(keyword);
-  //     searchQueryInput.value = ''; // 検索キーワードをクリア
-  //   }
-  // });
+  // ヘルプオーバーレイについて
+  const helpButton = document.querySelector('.nav img[alt="ヘルプアイコン"]');
+  const helpOverlay = document.getElementById('help-overlay');
+  const helpCloseButton = document.getElementById('help-close');
+
+  helpButton.addEventListener('click', function() {
+    helpOverlay.style.display = 'flex';
+  });
+
+  // ヘルプオーバーレイを閉じる関数
+  function closeHelpOverlay() {
+    helpOverlay.style.display = 'none';
+  }
+
+  // 閉じるボタンのクリックイベント
+  helpCloseButton.addEventListener('click', closeHelpOverlay);
+
+  // オーバーレイ外のクリックイベント
+  helpOverlay.addEventListener('click', function(event) {
+    if (event.target === helpOverlay) {
+      closeHelpOverlay();
+    }
+  });
 });
