@@ -17,14 +17,10 @@ document.getElementById('search-button').addEventListener('click', function() {
     let results;
 
     if (isProMode) {
-      // Proモードの検索処理を別ファイルから呼び出し
       results = proSearch(text, searchQuery);
     } else {
-      // Normalモードの検索処理
-      results = lines.filter(line => {
-        const regex = new RegExp(`\\b${searchQuery}\\b`, 'i');
-        return regex.test(line);
-      });
+      const regex = new RegExp(searchQuery, 'i');
+      results = lines.filter(line => regex.test(line));
     }
 
     if (results.length === 0) {

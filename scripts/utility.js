@@ -1,3 +1,5 @@
+let isProMode = false;
+
 document.addEventListener('DOMContentLoaded', function() {
   // ローディングアニメーションを非表示にする初期設定
   const loadingIndicator = document.getElementById('loading-indicator');
@@ -9,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const searchContainer = document.getElementById('search-fields');
   const keywordsContainer = document.getElementById('keywords-container');
   const addButton = document.getElementById('add-button');
-  let isProMode = false;
 
   // 初期状態でNormalモードを示す
   normalModeButton.innerHTML = '▶︎ Normal';
@@ -162,7 +163,6 @@ document.addEventListener('DOMContentLoaded', function() {
       removeButton.textContent = '×';
       removeButton.addEventListener('click', function() {
           keywordsContainer.removeChild(keywordTag);
-          document.body.removeChild(form);
       });
 
       keywordTag.appendChild(removeButton);
@@ -173,23 +173,28 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   addButton.addEventListener('click', function() {
+    if (isProMode) {
       const searchQueryInput = document.getElementById('search-query');
       const keyword = searchQueryInput.value.trim();
       if (keyword !== '') {
-          addKeywordTag(keyword);
-          searchQueryInput.value = '';
+        addKeywordTag(keyword);
+        searchQueryInput.value = '';
       }
+    }
   });
 
   document.getElementById('search-query').addEventListener('keypress', function(event) {
-      if (event.key === 'Enter') {
-          event.preventDefault();
-          const searchQueryInput = document.getElementById('search-query');
-          const keyword = searchQueryInput.value.trim();
-          if (keyword !== '') {
-              addKeywordTag(keyword);
-              searchQueryInput.value = '';
-          }
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const searchQueryInput = document.getElementById('search-query');
+      const keyword = searchQueryInput.value.trim();
+      if (isProMode && keyword !== '') {
+        addKeywordTag(keyword);
+        searchQueryInput.value = '';
+      } else if (!isProMode) {
+        // Normalモードの場合は検索を実行し、タグ化しない
+        document.getElementById('search-button').click();
       }
+    }
   });
 });

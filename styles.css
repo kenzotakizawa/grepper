@@ -1,3 +1,5 @@
+/* 既存のstyles.cssのコードに追記する */
+
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
@@ -49,7 +51,7 @@ textarea, #results {
   padding: 1rem;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 30px; /* 角を丸くする */
   resize: none;
   color: #333;
   height: 200px;
@@ -115,7 +117,7 @@ textarea, #results {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 30px;
+  border-radius: 30px; /* 角を丸くする */
   box-sizing: border-box;
   height: 48px;
   color: #333;
@@ -150,7 +152,7 @@ textarea, #results {
   color: #FFA500;
   background-color: white;
   border: none;
-  border-radius: 30px;
+  border-radius: 30px; /* 角を丸くする */
   cursor: pointer;
   transition: background-color 0.3s;
   text-align: center;
@@ -263,7 +265,7 @@ textarea, #results {
 .menu-content, .help-content {
   background-color: #FFA500;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 20px; /* 角を丸くする */
   max-width: 600px;
   width: 90%;
   max-height: 80%;
@@ -281,21 +283,21 @@ textarea, #results {
 }
 
 .mode-button, #menu-close, #help-close {
-  background-color: white;
-  color: #FFA500;
+  background-color: #FFA500;
+  color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 30px; /* 角を丸くする */
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
   cursor: pointer;
-  display: block;
-  margin: 20px auto 0;
-  width: 80%;
-  max-width: 200px;
+  transition: background-color 0.3s;
+  text-align: center;
+  height: 48px;
   box-sizing: border-box;
 }
 
 .mode-button:hover, #menu-close:hover, #help-close:hover {
-  background-color: #f0f0f0;
+  background-color: #e59400;
 }
 
 .indicator {
@@ -314,8 +316,8 @@ textarea, #results {
   align-items: center;
   background-color: #FFA500;
   color: white;
-  padding: 0.5rem;
-  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  border-radius: 30px; /* 角を丸くする */
   margin: 0.25rem;
 }
 
@@ -352,36 +354,44 @@ textarea, #results {
   padding: 1rem;
   z-index: 10;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
+  border-radius: 30px; /* 角を丸くする */
 }
 
-.input-group {
+.form-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-container .input-group {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.input-group input {
+.form-container .input-group input {
   width: 50px;
   text-align: center;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 30px; /* 角を丸くする */
   padding: 0.5rem;
 }
 
-.input-group button {
-  background-color: #e0e0e0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.form-container .input-group button {
+  background-color: #FFA500;
+  border: none;
+  border-radius: 30px; /* 角を丸くする */
   width: 30px;
   height: 30px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: white;
+  font-size: 1rem;
 }
 
-.input-group button:hover {
-  background-color: #d0d0d0;
+.form-container .input-group button:hover {
+  background-color: #e59400;
 }

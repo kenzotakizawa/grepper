@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // +ボタンのクリックイベント
   addButton.addEventListener('click', function() {
     const keyword = searchQueryInput.value.trim();
-    if (keyword !== '') {
+    if (keyword !== '' && isProMode) { // isProModeのチェックを追加
       addKeywordTag(keyword);
       searchQueryInput.value = ''; // 検索キーワードをクリア
     }
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (event.key === 'Enter') {
       event.preventDefault(); // フォームの送信を防ぐ
       const keyword = searchQueryInput.value.trim();
-      if (keyword !== '') {
+      if (keyword !== '' && isProMode) { // isProModeのチェックを追加
         addKeywordTag(keyword);
         searchQueryInput.value = ''; // 検索キーワードをクリア
       }
