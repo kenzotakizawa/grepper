@@ -1,3 +1,4 @@
+// search.js
 document.getElementById('search-button').addEventListener('click', function() {
   const text = document.getElementById('input-text').value;
   const searchQuery = document.getElementById('search-query').value.trim();

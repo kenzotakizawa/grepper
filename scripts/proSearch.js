@@ -1,3 +1,4 @@
+// proSearch.js
 document.addEventListener('DOMContentLoaded', function() {
   const addButton = document.getElementById('add-button');
   const searchQueryInput = document.getElementById('search-query');

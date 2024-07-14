@@ -1,90 +1,93 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>テキスト抽出ツール Grepper</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="header">
-    <div class="logo">
-      <img src="images/logo.svg" alt="サービスロゴ">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テキスト抽出ツール Grepper</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <img src="images/logo.svg" alt="サービスロゴ">
+      </div>
+      <div class="nav">
+        <a href="#"><img src="https://img.icons8.com/ios-filled/50/ffffff/menu.png" alt="メニューアイコン"></a>
+        <a href="#"><img src="https://img.icons8.com/ios-filled/50/ffffff/help.png" alt="ヘルプアイコン"></a>
+      </div>
     </div>
-    <div class="nav">
-      <a href="#"><img src="https://img.icons8.com/ios-filled/50/ffffff/menu.png" alt="メニューアイコン"></a>
-      <a href="#"><img src="https://img.icons8.com/ios-filled/50/ffffff/help.png" alt="ヘルプアイコン"></a>
-    </div>
-  </div>
-  <div class="main">
-    <div class="textarea-container">
-      <div class="textarea-wrapper">
-        <textarea id="input-text" rows="10" placeholder="テキストをここに貼り付けてください..."></textarea>
-        <div class="upload-button-container" id="upload-button">
-          <img src="https://img.icons8.com/ios-filled/50/ffffff/upload.png" alt="アップロードアイコン">
+    <div class="main">
+      <div class="textarea-container">
+        <div class="textarea-wrapper">
+          <textarea id="input-text" rows="10" placeholder="テキストをここに貼り付けてください..."></textarea>
+          <div class="upload-button-container" id="upload-button">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/upload.png" alt="アップロードアイコン">
+          </div>
+        </div>
+        <h2 class="keywords-title">検索キーワード</h2>
+        <div id="keywords-container"></div>
+        <div class="search-container" id="search-fields">
+          <div class="search-field-wrapper">
+            <input type="text" id="search-query" placeholder="検索文字列を入力してください..." class="search-field">
+            <button class="add-button" id="add-button" style="display:none;">+</button>
+          </div>
+          <button class="button" id="search-button">
+            <img src="https://img.icons8.com/ios-filled/50/FFA500/search.png" class="button-icon" alt="検索アイコン">
+            検索
+          </button>        
         </div>
       </div>
-      <h2 class="keywords-title">検索キーワード</h2>
-      <div id="keywords-container"></div>
-      <div class="search-container" id="search-fields">
-        <div class="search-field-wrapper">
-          <input type="text" id="search-query" placeholder="検索文字列を入力してください..." class="search-field">
-          <button class="add-button" id="add-button" style="display:none;">+</button>
-        </div>
-        <button class="button" id="search-button">
-          <img src="https://img.icons8.com/ios-filled/50/FFA500/search.png" class="button-icon" alt="検索アイコン">
-          検索
-        </button>        
-      </div>
-    </div>
-    <div class="results-container">
-      <div class="results-wrapper">
-        <div id="results">
-          <p>検索結果がここに表示されます...</p>
-        </div>
-        <div class="copy-button-container" id="copy-button">
-          <img src="https://img.icons8.com/ios-filled/50/ffffff/copy.png" alt="コピーアイコン">
+      <div class="results-container">
+        <div class="results-wrapper">
+          <div id="results">
+            <p>検索結果がここに表示されます...</p>
+          </div>
+          <div class="copy-button-container" id="copy-button">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/copy.png" alt="コピーアイコン">
+          </div>
         </div>
       </div>
-    </div>
-    <div id="loading-indicator" class="loading-indicator">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-    </div>
-
-    <div class="menu-overlay" id="menu-overlay">
-      <div class="menu-content">
-        <h2>モードを選ぶ</h2>
-        <button class="mode-button" id="normal-mode-button">Normal <span id="normal-indicator" class="indicator">▶︎</span></button>
-        <button class="mode-button" id="pro-mode-button">Pro <span id="pro-indicator" class="indicator">▶︎</span></button>
-        <button id="menu-close">閉じる</button>
+      <div id="loading-indicator" class="loading-indicator">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    
+      <div class="menu-overlay" id="menu-overlay">
+        <div class="menu-content">
+          <h2>モードを選ぶ</h2>
+          <button class="mode-button" id="normal-mode-button">Normal <span id="normal-indicator" class="indicator">▶︎</span></button>
+          <button class="mode-button" id="pro-mode-button">Pro <span id="pro-indicator" class="indicator">▶︎</span></button>
+          <button id="menu-close">閉じる</button>
+        </div>
+      </div>
+    
+      <div class="help-overlay" id="help-overlay">
+        <div class="help-content">
+          <h2>このツールについて</h2>
+          <p>「行抜き君」は、指定したキーワードを含む行をテキストから抽出するためのツールです。このツールを使うことで、長いテキストから必要な情報を簡単に見つけ出すことができます。</p>
+          <h2>使い方</h2>
+          <p>以下の手順で使います：</p>
+          <ol>
+            <li>テキストを入力欄に貼り付けるか、アップロードボタンを使ってテキストファイルをアップロードします。</li>
+            <li>検索文字列入力欄に抽出したいキーワードを入力します。</li>
+            <li>検索ボタンをクリックします。</li>
+            <li>検索結果が下の領域に表示されます。</li>
+          </ol>
+          <h2>検索結果のコピー</h2>
+          <p>検索結果をクリップボードにコピーするには、コピーアイコンをクリックしてください。</p>
+          <h2>注意事項</h2>
+          <p>入力されたテキストデータは、処理後すぐに削除され、保存されることはありません。</p>
+          <button id="help-close">閉じる</button>
+        </div>
       </div>
     </div>
-
-    <div class="help-overlay" id="help-overlay">
-      <div class="help-content">
-        <h2>このツールについて</h2>
-        <p>「行抜き君」は、指定したキーワードを含む行をテキストから抽出するためのツールです。このツールを使うことで、長いテキストから必要な情報を簡単に見つけ出すことができます。</p>
-        <h2>使い方</h2>
-        <p>以下の手順で使います：</p>
-        <ol>
-          <li>テキストを入力欄に貼り付けるか、アップロードボタンを使ってテキストファイルをアップロードします。</li>
-          <li>検索文字列入力欄に抽出したいキーワードを入力します。</li>
-          <li>検索ボタンをクリックします。</li>
-          <li>検索結果が下の領域に表示されます。</li>
-        </ol>
-        <h2>検索結果のコピー</h2>
-        <p>検索結果をク��ップボードにコピーするには、コピーアイコンをクリックしてください。</p>
-        <h2>注意事項</h2>
-        <p>入力されたテキストデータは、処理後すぐに削除され、保存されることはありません。</p>
-        <button id="help-close">閉じる</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="scripts/utility.js"></script>
-  <script src="scripts/search.js"></script>
-  <script src="scripts/proSearch.js"></script>
-</body>
+  
+    <script src="scripts/utility.js"></script>
+    <script src="scripts/search.js"></script>
+    <script src="scripts/proSearch.js"></script>
+    <script src="scripts/mode.js"></script>
+    <script src="scripts/fileUpload.js"></script>
+    <script src="scripts/copy.js"></script>
+  </body>
 </html>
