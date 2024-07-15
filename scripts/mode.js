@@ -1,5 +1,4 @@
-// mode.js
-let isProMode = false;
+window.isProMode = false;
 
 document.addEventListener('DOMContentLoaded', function() {
   const normalModeButton = document.getElementById('normal-mode-button');
@@ -7,8 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const addButton = document.getElementById('add-button');
   const keywordsContainer = document.getElementById('keywords-container');
 
+  // 初期化時にNormalモードを選択状態にする
+  normalModeButton.innerHTML = '▶︎ Normal';
+  proModeButton.innerHTML = 'Pro';
+
   normalModeButton.addEventListener('click', function() {
-    isProMode = false;
+    window.isProMode = false;
     addButton.style.display = 'none';
     normalModeButton.innerHTML = '▶︎ Normal';
     proModeButton.innerHTML = 'Pro';
@@ -19,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   proModeButton.addEventListener('click', function() {
-    isProMode = true;
+    window.isProMode = true;
     addButton.style.display = 'inline';
     normalModeButton.innerHTML = 'Normal';
     proModeButton.innerHTML = '▶︎ Pro';
