@@ -1,13 +1,13 @@
 // addKeywordTag.js
-let keywordIdCounter = 1; // ユニークなIDカウンター、1から開始
-let currentForm = null; // 現在表示されているフォームを追跡
+let keywordIdCounter = 1;
+let currentForm = null;
 
 function addKeywordTag(keyword) {
   const keywordsContainer = document.getElementById('keywords-container');
   const keywordTag = document.createElement('div');
   keywordTag.className = 'keyword-tag';
   keywordTag.textContent = keyword;
-  keywordTag.setAttribute('data-id', `keyword-${keywordIdCounter}`); // ユニークIDを設定
+  keywordTag.setAttribute('data-id', `keyword-${keywordIdCounter}`);
   keywordIdCounter++;
 
   const removeButton = document.createElement('button');
@@ -23,7 +23,6 @@ function addKeywordTag(keyword) {
   keywordTag.appendChild(removeButton);
   keywordsContainer.appendChild(keywordTag);
 
-  // フォーム表示用のイベントリスナー追加
   keywordTag.addEventListener('mouseenter', showForm);
   keywordTag.addEventListener('mouseleave', (event) => hideForm(event, keywordTag));
 }
@@ -58,15 +57,14 @@ function showForm(event) {
           <input type="number" value="0" id="nAfter-${escapedKeyword}">
         </div>
     `;
-    form.setAttribute('data-id', formId); // フォームにIDを設定
+    form.setAttribute('data-id', formId);
     document.body.appendChild(form);
 
     const rect = keywordTag.getBoundingClientRect();
-    form.style.top = `${rect.top + window.scrollY + 20}px`; // 位置調整
+    form.style.top = `${rect.top + window.scrollY + 20}px`;
     form.style.left = `${rect.left + window.scrollX}px`;
     form.style.display = 'block';
 
-    // フォームに対するイベントリスナー追加
     form.addEventListener('mouseenter', () => {
       form.setAttribute('data-hover', 'true');
     });
@@ -85,7 +83,7 @@ function hideForm(event, keywordTag) {
   const form = document.querySelector(`.form-container[data-id="${formId}"]`);
 
   if (!relatedTarget || (keywordTag.contains(relatedTarget) || (form && form.contains(relatedTarget)))) {
-    return; // マウスがフォーム内に移動した場合は何もしない
+    return;
   }
 
   setTimeout(() => {
@@ -95,7 +93,23 @@ function hideForm(event, keywordTag) {
   }, 100);
 }
 
-// グローバルスコープに関数を配置
+function getKeywordsWithContext() {
+  const keywordsContainer = document.getElementById('keywords-container');
+  const keywordTags = keywordsContainer.querySelectorAll('.keyword-tag');
+  const keywordsWithContext = [];
+
+  keywordTags.forEach(tag => {
+    const keyword = tag.textContent.replace('×', '').trim();
+    const nBefore = document.getElementById(`nBefore-${escapeHtml(keyword)}`).value;
+    const nAfter = document.getElementById(`nAfter-${escapeHtml(keyword)}`).value;
+    keywordsWithContext.push({ keyword, nBefore: parseInt(nBefore, 10), nAfter: parseInt(nAfter, 10) });
+  });
+
+  console.log('Keywords with context:', keywordsWithContext);
+  return keywordsWithContext;
+}
+
 window.addKeywordTag = addKeywordTag;
 window.showForm = showForm;
 window.hideForm = hideForm;
+window.getKeywordsWithContext = getKeywordsWithContext;

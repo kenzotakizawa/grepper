@@ -1,12 +1,11 @@
 // search.js
 document.getElementById('search-button').addEventListener('click', function() {
   const text = document.getElementById('input-text').value;
-  const searchQuery = document.getElementById('search-query').value.trim();
   const resultsContainer = document.getElementById('results');
   const loadingIndicator = document.getElementById('loading-indicator');
   resultsContainer.innerHTML = '';
 
-  if (text.trim() === '' || searchQuery === '') {
+  if (text.trim() === '') {
     resultsContainer.innerHTML = '<p>検索文字列を入力してください。</p>';
     return;
   }
@@ -15,11 +14,18 @@ document.getElementById('search-button').addEventListener('click', function() {
 
   setTimeout(() => {
     const lines = text.split('\n').filter(line => line.trim() !== '');
-    let results;
+    let results = [];
 
-    if (isProMode) {
-      results = proSearch(text, searchQuery);
+    if (window.isProMode) {
+      results = window.proSearch(text);
     } else {
+      const searchQuery = document.getElementById('search-query').value.trim();
+      if (searchQuery === '') {
+        resultsContainer.innerHTML = '<p>検索文字列を入力してください。</p>';
+        loadingIndicator.style.display = 'none';
+        return;
+      }
+
       const regex = new RegExp(searchQuery, 'i');
       results = lines.filter(line => regex.test(line));
     }
