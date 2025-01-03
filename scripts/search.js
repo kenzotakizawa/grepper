@@ -99,23 +99,50 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (!keywordTag) continue;
         
-        if (typeof window.showForm === 'function') {
-          window.showForm({ currentTarget: keywordTag });
-        } else {
-          continue;
+        const formId = keywordTag.getAttribute('data-id');
+        let form = document.querySelector(`.form-container[data-id="${formId}"]`);
+        
+        if (!form) {
+          form = document.createElement('div');
+          form.className = 'form-container';
+          form.innerHTML = `
+            <label>対象キーワード "${keyword}" のN行前も含む</label>
+            <div class="input-group">
+              <input type="number" value="0" id="nBefore-${keyword}">
+            </div>
+            <label>対象キーワード "${keyword}" のN行後も含む</label>
+            <div class="input-group">
+              <input type="number" value="0" id="nAfter-${keyword}">
+            </div>
+          `;
+          form.setAttribute('data-id', formId);
+          form.style.display = 'none';
+          
+          const rect = keywordTag.getBoundingClientRect();
+          form.style.position = 'absolute';
+          form.style.top = `${rect.top + window.scrollY + 20}px`;
+          form.style.left = `${rect.left + window.scrollX}px`;
+          
+          document.body.appendChild(form);
+          
+          form.addEventListener('mouseenter', () => {
+            form.setAttribute('data-hover', 'true');
+          });
+          
+          form.addEventListener('mouseleave', () => {
+            form.removeAttribute('data-hover');
+            if (!form.contains(document.activeElement)) {
+              form.style.display = 'none';
+            }
+          });
         }
         
-        await new Promise(resolve => setTimeout(resolve, 200));
+        const beforeInput = form.querySelector('input[id^="nBefore-"]');
+        const afterInput = form.querySelector('input[id^="nAfter-"]');
         
-        const formContainer = document.querySelector(`.form-container[data-id="${keywordTag.getAttribute('data-id')}"]`);
-        if (formContainer) {
-          const beforeInput = formContainer.querySelector('input[id^="nBefore-"]');
-          const afterInput = formContainer.querySelector('input[id^="nAfter-"]');
-          
-          if (beforeInput && afterInput) {
-            beforeInput.value = befores[i] || '0';
-            afterInput.value = afters[i] || '0';
-          }
+        if (beforeInput && afterInput) {
+          beforeInput.value = befores[i] || '0';
+          afterInput.value = afters[i] || '0';
         }
       }
     };
