@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   linkButton.addEventListener('click', function() {
     if (window.isProMode) {
       console.log("Pro mode detected.");
-      generateProModeLink();
+      generateNormalModeLink();
     } else {
       console.log("Normal mode detected.");
       generateNormalModeLink();
@@ -17,25 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const keywords = urlParams.get('keywords');
     document.getElementById('search-query').value = keywords;
   }
-
-  if (urlParams.has('proKeywords')) {
-    const proKeywords = JSON.parse(urlParams.get('proKeywords'));
-    proKeywords.forEach(({ keyword, nBefore, nAfter }) => {
-      addKeywordTagWithContext(keyword, nBefore, nAfter);
-    });
-  }
 });
 
 function generateNormalModeLink() {
   const inputElement = document.getElementById('search-query');
-  if (inputElement) {
-    console.log("Input element found:", inputElement);
-  } else {
-    console.error("Input element not found.");
-  }
-
   const inputText = inputElement.value.trim();
-  console.log("Input text:", inputText);
 
   if (!inputText) {
     alert("キーワードを入力してください。");
@@ -44,23 +30,8 @@ function generateNormalModeLink() {
 
   const url = new URL(window.location.href);
   url.searchParams.set('keywords', inputText);
-  console.log("Generated URL:", url.toString());
   copyToClipboard(url.toString());
   changeLinkIconToCheck();
-}
-
-function generateProModeLink() {
-  const keywordsWithContext = window.getKeywordsWithContext();
-  console.log("Keywords with context:", keywordsWithContext);
-  if (keywordsWithContext.length === 0) {
-    alert("キーワードを登録してください。");
-    return;
-  }
-
-  const url = new URL(window.location.href);
-  url.searchParams.set('proKeywords', JSON.stringify(keywordsWithContext));
-  console.log("Generated URL:", url.toString());
-  copyToClipboard(url.toString());
 }
 
 function copyToClipboard(text) {
@@ -73,18 +44,11 @@ function copyToClipboard(text) {
 }
 
 function changeLinkIconToCheck() {
-  const linkIcon = document.getElementById('link-icon');
+  const linkIcon = document.getElementById('link-button');
   if (linkIcon) {
-    linkIcon.src = "https://img.icons8.com/ios-filled/50/FFFFFF/checkmark.png";
-  } else {
-    console.error("Link icon element not found.");
+    linkIcon.src = "https://img.icons8.com/ios-filled/20/FFFFFF/checkmark.png";
+    setTimeout(() => {
+      linkIcon.src = "https://img.icons8.com/ios-filled/20/ffffff/link.png";
+    }, 2000);
   }
-}
-
-function escapeHtml(unsafe) {
-  return unsafe.replace(/&/g, "&amp;")
-               .replace(/</g, "&lt;")
-               .replace(/>/g, "&gt;")
-               .replace(/"/g, "&quot;")
-               .replace(/'/g, "&#039;");
 }

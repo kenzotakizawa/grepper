@@ -331,6 +331,10 @@ textarea, #results {
 
 .keywords-title {
   color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
 }
 
 .tag-container {
@@ -394,4 +398,16 @@ textarea, #results {
 
 .form-container .input-group button:hover {
   background-color: #e59400;
+}
+
+.link-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  margin-top: 2px;
+}
+
+.link-icon:hover {
+  opacity: 0.8;
 }
