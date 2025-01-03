@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   linkButton.addEventListener('click', function() {
     if (window.isProMode) {
       console.log("Pro mode detected.");
-      generateNormalModeLink();
+      generateProModeLink();
     } else {
       console.log("Normal mode detected.");
       generateNormalModeLink();
@@ -50,5 +50,32 @@ function changeLinkIconToCheck() {
     setTimeout(() => {
       linkIcon.src = "https://img.icons8.com/ios-filled/20/ffffff/link.png";
     }, 2000);
+  }
+}
+
+function generateProModeLink() {
+  try {
+    const keywordsWithContext = window.getKeywordsWithContext();
+    
+    if (keywordsWithContext.length === 0) {
+      alert("検索キーワードを追加してください。");
+      return;
+    }
+
+    const url = new URL(window.location.href);
+    url.search = '';  // 既存のパラメータをクリア
+    
+    keywordsWithContext.forEach(({ keyword, nBefore, nAfter }) => {
+      url.searchParams.append('q', keyword);
+      url.searchParams.append('before', nBefore.toString());
+      url.searchParams.append('after', nAfter.toString());
+    });
+
+    copyToClipboard(url.toString());
+    changeLinkIconToCheck();
+
+  } catch (error) {
+    console.error('リンク生成エラー:', error);
+    alert("リンクの生成中にエラーが発生しました。");
   }
 }

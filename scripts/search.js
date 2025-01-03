@@ -1,5 +1,6 @@
 // search.js
 document.addEventListener('DOMContentLoaded', function() {
+  const urlParams = new URLSearchParams(window.location.search);
   const searchButton = document.getElementById('search-button');
   const searchQueryInput = document.getElementById('search-query');
 
@@ -69,4 +70,56 @@ document.addEventListener('DOMContentLoaded', function() {
       executeSearch();
     }
   });
+
+  // 既存のURL処理部分を確認
+  if (urlParams.has('keywords')) {
+    const keywords = urlParams.get('keywords');
+    document.getElementById('search-query').value = keywords;
+  }
+
+  // 新しいURL処理を追加
+  if (urlParams.has('q')) {
+    const keywords = urlParams.getAll('q');
+    const befores = urlParams.getAll('before');
+    const afters = urlParams.getAll('after');
+    
+    window.isProMode = true;
+    
+    const setupKeywords = async () => {
+      for (let i = 0; i < keywords.length; i++) {
+        const keyword = keywords[i];
+        
+        window.addKeywordTag(keyword);
+        await new Promise(resolve => setTimeout(resolve, 200));
+        
+        const keywordTags = document.querySelectorAll('.keyword-tag');
+        const keywordTag = Array.from(keywordTags).find(tag => 
+          tag.textContent.replace('×', '').trim() === keyword
+        );
+        
+        if (!keywordTag) continue;
+        
+        if (typeof window.showForm === 'function') {
+          window.showForm({ currentTarget: keywordTag });
+        } else {
+          continue;
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, 200));
+        
+        const formContainer = document.querySelector(`.form-container[data-id="${keywordTag.getAttribute('data-id')}"]`);
+        if (formContainer) {
+          const beforeInput = formContainer.querySelector('input[id^="nBefore-"]');
+          const afterInput = formContainer.querySelector('input[id^="nAfter-"]');
+          
+          if (beforeInput && afterInput) {
+            beforeInput.value = befores[i] || '0';
+            afterInput.value = afters[i] || '0';
+          }
+        }
+      }
+    };
+    
+    setupKeywords();
+  }
 });
