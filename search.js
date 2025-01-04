@@ -1,46 +1,4 @@
 // search.js
-let searchWorker;
-
-document.addEventListener('DOMContentLoaded', function() {
-  // Web Workerの初期化
-  searchWorker = new Worker('scripts/workers/searchWorker.js');
-  
-  // 検索結果の受信処理
-  searchWorker.addEventListener('message', function(e) {
-    const loadingIndicator = document.getElementById('loading-indicator');
-    const resultsContainer = document.getElementById('results');
-    
-    if (e.data.type === 'success') {
-      const results = e.data.results;
-      
-      if (results.length === 0) {
-        resultsContainer.innerHTML = '<p>検索文字を含む行は見つかりませんでした。</p>';
-      } else {
-        resultsContainer.innerHTML = '';
-        results.forEach(result => {
-          const p = document.createElement('p');
-          p.textContent = result;
-          p.style.margin = '0';
-          resultsContainer.appendChild(p);
-        });
-      }
-    } else if (e.data.type === 'error') {
-      resultsContainer.innerHTML = `<p class="error">検索中にエラーが発生しました: ${e.data.error}</p>`;
-    }
-    
-    loadingIndicator.style.display = 'none';
-  });
-
-  // エラーハンドリング
-  searchWorker.addEventListener('error', function(error) {
-    const loadingIndicator = document.getElementById('loading-indicator');
-    const resultsContainer = document.getElementById('results');
-    
-    console.error('Worker error:', error);
-    resultsContainer.innerHTML = '<p class="error">検索処理でエラーが発生しました。</p>';
-    loadingIndicator.style.display = 'none';
-  });
-});
 
 // 検索実行関数
 async function executeSearch() {
@@ -55,6 +13,7 @@ async function executeSearch() {
     return;
   }
 
+  // ローディングインジケーターを表示
   resultsContainer.innerHTML = '';
   loadingIndicator.style.display = 'block';
 
@@ -66,6 +25,7 @@ async function executeSearch() {
         loadingIndicator.style.display = 'none';
         return;
       }
+      // Web Workerにメッセージを送信して検索を実行
       searchWorker.postMessage({
         text,
         keywords: keywordsWithContext,
@@ -78,6 +38,7 @@ async function executeSearch() {
         loadingIndicator.style.display = 'none';
         return;
       }
+      // Web Workerにメッセージを送信して通常検索を実行
       searchWorker.postMessage({
         text,
         keywords: searchQuery,
@@ -91,6 +52,7 @@ async function executeSearch() {
   }
 }
 
+// フォーム管理クラス
 class SearchFormManager {
   constructor() {
     this.forms = new Map(); // フォームを管理するためのMap
@@ -144,13 +106,19 @@ class SearchFormManager {
     return form;
   }
 
-  // フォームの削除とクリーンアップ
+  // 既存のフォームをクリーンアップするメソッド
+  cleanup() {
+    for (const formId of this.forms.keys()) {
+      this.removeForm(formId);
+    }
+  }
+
+  // フォームを削除するメソッド
   removeForm(formId) {
     const form = this.forms.get(formId);
     if (form) {
       const listeners = this.eventListeners.get(form);
       if (listeners) {
-        // イベントリスナーの削除
         Object.entries(listeners).forEach(([event, handler]) => {
           form.removeEventListener(event, handler);
         });
@@ -160,15 +128,9 @@ class SearchFormManager {
       this.eventListeners.delete(form);
     }
   }
-
-  // 全フォームのクリーンアップ
-  cleanup() {
-    for (const formId of this.forms.keys()) {
-      this.removeForm(formId);
-    }
-  }
 }
 
+// キーワード設定管理クラス
 class KeywordSetupManager {
   constructor() {
     this.formManager = new SearchFormManager();
@@ -176,6 +138,7 @@ class KeywordSetupManager {
     this.isProcessing = false;
   }
 
+  // キーワードのセットアップを非同期で行うメソッド
   async setupKeywords(keywords, befores = [], afters = []) {
     // 既存のフォームをクリーンアップ
     this.formManager.cleanup();
@@ -190,6 +153,7 @@ class KeywordSetupManager {
     }
   }
 
+  // キーワードセットアップのキューを処理するメソッド
   async processQueue() {
     this.isProcessing = true;
 
@@ -203,9 +167,10 @@ class KeywordSetupManager {
     }
   }
 
+  // 単一のキーワードセットアップを行うメソッド
   async setupSingleKeyword(keyword, before, after) {
     return new Promise((resolve) => {
-      // RequestAnimationFrameを使用してUIのブロッキングを防ぐ
+      // UIのブロッキングを防ぐためにRequestAnimationFrameを使用
       requestAnimationFrame(async () => {
         try {
           // キーワードタグの追加
@@ -245,11 +210,6 @@ class KeywordSetupManager {
       });
     });
   }
-
-  cleanup() {
-    this.setupQueue = [];
-    this.formManager.cleanup();
-  }
 }
 
 // グローバルインスタンスの作成
@@ -258,11 +218,12 @@ const keywordSetupManager = new KeywordSetupManager();
 // 共通の検索ハンドラーを作成
 class SearchHandler {
   constructor() {
-    this.searchInProgress = false;
-    this.searchProcessor = new SearchProcessor();
-    this.setupUI();
+    this.searchInProgress = false;                 // 検索中かどうかのフラグ
+    this.searchProcessor = new SearchProcessor();  // 検索プロセッサのインスタンス
+    this.setupUI();                                // UIのセットアップ
   }
 
+  // UIのセットアップを行うメソッド
   setupUI() {
     const searchButton = document.getElementById('search-button');
     const cancelButton = document.createElement('button');
@@ -271,10 +232,14 @@ class SearchHandler {
     cancelButton.style.display = 'none';
     searchButton.parentNode.insertBefore(cancelButton, searchButton.nextSibling);
 
+    // 検索ボタンにクリックイベントリスナーを登録
     searchButton.addEventListener('click', () => this.handleSearch());
+
+    // 中断ボタンにクリックイベントリスナーを登録
     cancelButton.addEventListener('click', () => this.handleCancel());
   }
 
+  // 検索を実行するメソッド
   async handleSearch() {
     if (this.searchInProgress) return;
 
@@ -314,8 +279,10 @@ class SearchHandler {
         results = await this.normalSearch(text, query);
       }
 
+      // 検索結果を表示
       this.displayResults(results);
     } catch (error) {
+      // エラーを表示
       this.showError(error);
     } finally {
       this.searchInProgress = false;
@@ -324,13 +291,14 @@ class SearchHandler {
     }
   }
 
+  // 検索を中断するメソッド
   handleCancel() {
     if (this.searchProcessor) {
       this.searchProcessor.abort();
     }
   }
 
-  // 通常検索の実装
+  // 通常モードの検索を実装するメソッド
   async normalSearch(text, query) {
     const lines = text.split('\n');
     const results = [];
@@ -348,7 +316,7 @@ class SearchHandler {
     }
   }
 
-  // 結果表示の実装
+  // 検索結果を表示するメソッド
   displayResults(results) {
     const resultsContainer = document.getElementById('results');
     if (results.length === 0) {
@@ -361,7 +329,7 @@ class SearchHandler {
       .join('');
   }
 
-  // エラー表示の実装
+  // エラーを表示するメソッド
   showError(error) {
     const resultsContainer = document.getElementById('results');
     resultsContainer.innerHTML = `
@@ -371,20 +339,10 @@ class SearchHandler {
       </div>`;
   }
 
-  // HTMLエスケープ
+  // HTMLエスケープを行うメソッド
   escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
-}
-
-// 初期化
-document.addEventListener('DOMContentLoaded', () => {
-  window.searchHandler = new SearchHandler();
-});
-
-// クリーンアップ処理
-window.addEventListener('beforeunload', () => {
-  keywordSetupManager.cleanup();
-});
+} 

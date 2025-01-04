@@ -1,8 +1,8 @@
-// proSearch.js
 document.addEventListener('DOMContentLoaded', function() {
   const addButton = document.getElementById('add-button');
   const searchQueryInput = document.getElementById('search-query');
 
+  // キーワードを追加する関数
   function addKeyword() {
     const keyword = searchQueryInput.value.trim();
     if (keyword !== '' && window.isProMode) {
@@ -11,7 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  // 追加ボタンにクリックイベントリスナーを登録
   addButton.addEventListener('click', addKeyword);
+
+  // 検索クエリ入力フィールドにEnterキー押下時のハンドラーを登録
   searchQueryInput.addEventListener('keypress', function(event) {
     window.handleEnterKey(event);
   });
@@ -29,27 +32,29 @@ class SearchError extends Error {
 
 // エラー種別の定義
 const ErrorTypes = {
-  INVALID_INPUT: 'INVALID_INPUT',
-  TIMEOUT: 'TIMEOUT',
-  REGEX_ERROR: 'REGEX_ERROR',
-  SYSTEM_ERROR: 'SYSTEM_ERROR',
-  ABORTED: 'ABORTED'
+  INVALID_INPUT: 'INVALID_INPUT', // 無効な入力
+  TIMEOUT: 'TIMEOUT',             // タイムアウト
+  REGEX_ERROR: 'REGEX_ERROR',     // 正規表現エラー
+  SYSTEM_ERROR: 'SYSTEM_ERROR',   // システムエラー
+  ABORTED: 'ABORTED'              // 検索中断
 };
 
+// 検索処理を担当するクラス
 class SearchProcessor {
   constructor(options = {}) {
-    this.timeout = options.timeout || 5000;
-    this.chunkSize = options.chunkSize || 1000;
-    this.regexCache = new Map();
-    this.abortController = new AbortController();
+    this.timeout = options.timeout || 5000;       // タイムアウト時間の設定
+    this.chunkSize = options.chunkSize || 1000;   // 処理する行数のチャンクサイズ
+    this.regexCache = new Map();                  // 正規表現のキャッシュ
+    this.abortController = new AbortController();  // 検索中断用のコントローラー
   }
 
-  // 検索中断メソッド
+  // 検索を中断するメソッド
   abort() {
     this.abortController.abort();
     this.abortController = new AbortController();
   }
 
+  // テキストのチャンク処理を行うメソッド
   async processChunk(lines, start, keyword, regex, nBefore, nAfter, processedLines) {
     // 中断シグナルのチェック
     if (this.abortController.signal.aborted) {
@@ -57,17 +62,19 @@ class SearchProcessor {
     }
 
     const end = Math.min(start + this.chunkSize, lines.length);
-    
+
     for (let i = start; i < end; i++) {
       // 各イテレーションで中断シグナルをチェック
       if (this.abortController.signal.aborted) {
         throw new SearchError('検索が中断されました', ErrorTypes.ABORTED);
       }
 
+      // キーワードにマッチした行を処理
       if (regex.test(lines[i])) {
         const contextStart = Math.max(0, i - nBefore);
         const contextEnd = Math.min(lines.length, i + nAfter + 1);
         
+        // 前後のコンテキスト行を追加
         for (let j = contextStart; j < contextEnd; j++) {
           if (!processedLines.has(j)) {
             processedLines.set(j, lines[j]);
@@ -79,6 +86,7 @@ class SearchProcessor {
     return end;
   }
 
+  // キーワードから正規表現を取得（キャッシュを利用）
   getRegex(keyword) {
     if (!this.regexCache.has(keyword)) {
       const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -87,17 +95,20 @@ class SearchProcessor {
     return this.regexCache.get(keyword);
   }
 
+  // 検索を実行するメソッド
   async search(text, keywordsWithContext) {
     try {
-      const lines = text.split('\n');
-      const processedLines = new Map();
+      const lines = text.split('\n');                       // テキストを行ごとに分割
+      const processedLines = new Map();                      // 処理済み行を保持するMap
       
+      // 各キーワードに対して検索を実行
       for (const { keyword, nBefore, nAfter } of keywordsWithContext) {
         const regex = this.getRegex(keyword);
         let position = 0;
         
         while (position < lines.length) {
           try {
+            // チャンク処理とタイムアウトを競合させる
             position = await Promise.race([
               this.processChunk(lines, position, keyword, regex, nBefore, nAfter, processedLines),
               new Promise((_, reject) => {
@@ -122,6 +133,7 @@ class SearchProcessor {
         }
       }
 
+      // 処理済み行をソートして配列として返す
       return Array.from(processedLines.entries())
         .sort(([a], [b]) => a - b)
         .map(([_, line]) => line);
@@ -133,18 +145,15 @@ class SearchProcessor {
       throw error;
     }
   }
-
-  clearCache() {
-    this.regexCache.clear();
-  }
 }
 
-// メイン検索関数の更新
+// メイン検索プロセッサのインスタンス作成
 const searchProcessor = new SearchProcessor({
-  timeout: 3000,  // 3秒
+  timeout: 3000,  // タイムアウトを3秒に設定
   chunkSize: 500  // 500行ずつ処理
 });
 
+// プロモードでの検索関数
 async function proSearch(text) {
   try {
     // 入力値の検証
@@ -164,6 +173,7 @@ async function proSearch(text) {
       );
     }
 
+    // 検索を実行し結果を返す
     return await searchProcessor.search(text, keywordsWithContext);
 
   } catch (error) {
@@ -219,8 +229,4 @@ window.addEventListener('searchError', (event) => {
           <p>問題が続く場合は、管理者にお問い合わせください。</p>
         </div>`;
   }
-});
-
-window.proSearch = proSearch;
-window.SearchError = SearchError;
-window.ErrorTypes = ErrorTypes;
+}); 

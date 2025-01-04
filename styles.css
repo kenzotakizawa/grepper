@@ -1,5 +1,6 @@
 /* 既存のstyles.cssのコードに追記する */
 
+/* ボディ全体のスタイル設定 */
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
@@ -7,12 +8,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #FFA500;
-  color: #333;
+  background-color: #FFA500; /* オレンジ色の背景 */
+  color: #333;              /* 文字色を濃いグレーに設定 */
   height: 100vh;
   overflow: auto;
 }
 
+/* ヘッダー部分のスタイル */
 .header {
   width: 90%;
   max-width: 1200px;
@@ -20,46 +22,52 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: #FFA500;
-  color: white;
+  background-color: #FFA500; /* オレンジ色の背景 */
+  color: white;              /* 文字色を白に設定 */
   box-sizing: border-box;
   margin: auto;
 }
 
+/* ロゴ部分のスタイル */
 .logo {
   font-size: 2rem;
   font-weight: bold;
 }
 
+/* ナビゲーション部分のスタイル */
 .nav {
   display: flex;
   align-items: center;
 }
 
+/* ナビゲーション内の画像アイコンのスタイル */
 .nav img {
   width: 24px;
   height: 24px;
   margin: 0 1rem;
 }
 
+/* テキストエリアと結果エリアのラッパーのスタイル */
 .textarea-wrapper, .results-wrapper {
   position: relative;
 }
 
+/* テキストエリアと結果表示エリアの共通スタイル */
 textarea, #results {
   width: 100%;
   padding: 1rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 30px; /* 角を丸くする */
-  resize: none;
-  color: #333;
+  border: 1px solid #ccc;         /* 薄いグレーの枠線 */
+  border-radius: 30px;            /* 角を丸くする */
+  resize: none;                   /* サイズ変更を不可にする */
+  color: #333;                    /* 文字色を濃いグレーに設定 */
   height: 200px;
-  overflow-y: auto;
-  background-color: white;
+  overflow-y: auto;               /* 縦方向のスクロールを有効にする */
+  background-color: white;        /* 背景色を白に設定 */
   box-sizing: border-box;
 }
 
+/* 検索結果表示エリアのスタイル */
 #results {
   display: flex;
   flex-direction: column;
@@ -67,9 +75,10 @@ textarea, #results {
   overflow-y: auto;
 }
 
+/* 検索結果のパラグラフ、プレースホルダーのテキストスタイル */
 #results p, #input-text::placeholder, #search-query::placeholder {
   text-align: left;
-  color: #999;
+  color: #999;      /* 薄いグレーの文字色 */
   margin: 0;
 }
 
